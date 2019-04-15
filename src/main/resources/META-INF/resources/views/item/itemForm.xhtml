@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template.xhtml">
+
+
+    <ui:define name="title">
+        <h:outputText value="Item Creation Form"/>
+    </ui:define>
+
+    <ui:define name="body">
+        <h:form id="ItemForm">
+            <p:remoteCommand name="updateItemStock"
+                             actionListener="#{itemStockController.updateStockDataModel}"
+                             update=":ItemForm:itemstocklist"/>
+            <p:growl id="msgs" showDetail="true" autoUpdate="true"/>
+            <p:panel>
+                <p:commandButton value="First"
+                                 actionListener="#{itemController.navigationController.first()}"
+                                 disabled="#{itemController.navigationController.firstDisabled}"
+                                 process="@this" oncomplete="updateItemStock()" update="@form"/>
+                <p:commandButton value="Previous"
+                                 actionListener="#{itemController.navigationController.previous()}"
+                                 disabled="#{itemController.navigationController.previousDisabled}"
+                                 process="@this" oncomplete="updateItemStock()" update="@form"/>
+                <p:commandButton value="Next"
+                                 actionListener="#{itemController.navigationController.next()}"
+                                 disabled="#{itemController.navigationController.nextDisabled}"
+                                 process="@this" oncomplete="updateItemStock()" update="@form"/>
+                <p:commandButton value="Last"
+                                 actionListener="#{itemController.navigationController.last()}"
+                                 disabled="#{itemController.navigationController.lastDisabled}"
+                                 process="@this" oncomplete="updateItemStock()" update="@form"/>
+                <p:commandButton value="Print" rendered="false">
+                    <p:printer target=":confirmItemDeleteDlg"/>
+                </p:commandButton>
+                <p:commandButton rendered="false" value="Print2"
+                                 onclick="window.print()"/>
+            </p:panel>
+            <p:panel header="Items" id="ItemMainPanel">
+                <p:panelGrid id="ItemsGrid" columns="2">
+                    <p:outputLabel value="Item Code"/>
+                    <h:outputText
+                            value="#{itemController.navigationController.object.itemCode}"
+                            style="display: block; width: 100%;#{itemController.navigationController.object.creationDate != null ? 'color:unset' : 'color:White'}"/>
+                    <p:outputLabel value="Item Barcode" for="itemBarcode"/>
+                    <p:inputText id="itemBarcode"
+                                 value="#{itemController.navigationController.object.itemBarcode}"
+                                 valueChangeListener="#{itemController.onValueChanged}"
+                                 title="Item Barcode" style="width: 100%">
+                        <p:ajax update="saveItemButton cancelItemButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Item Desc." for="itemDesc"/>
+                    <p:inputText id="itemDesc"
+                                 value="#{itemController.navigationController.object.itemDesc}"
+                                 required="true"
+                                 valueChangeListener="#{itemController.onValueChanged}"
+                                 title="Item Desc." style="width: 100%">
+                        <p:ajax update="saveItemButton cancelItemButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Categories" for="itemCategory"/>
+                    <p:selectOneMenu id="itemCategory"
+                                     value="#{itemController.navigationController.object.itemCategory}"
+                                     valueChangeListener="#{itemController.onValueChanged}"
+                                     filter="true" editable="true" style="width: available">
+                        <p:ajax update="saveItemButton cancelItemButton"/>
+                        <f:selectItems value="#{itemController.itemCats}" var="cat"
+                                       itemValue="#{cat}" noSelectionValue="Select Category"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="U.O.M" for="itemUom"/>
+                    <p:selectOneMenu id="itemUom"
+                                     value="#{itemController.navigationController.object.itemUom}"
+                                     valueChangeListener="#{itemController.onValueChanged}"
+                                     filter="true" editable="true" required="true"
+                                     style="width: fit-content">
+                        <p:ajax update="saveItemButton cancelItemButton"/>
+                        <f:selectItems value="#{itemController.itemUoms}" var="uom"
+                                       itemValue="#{uom}" noSelectionValue="Select U.O.M"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Purchase Price" for="purchasePrice"/>
+                    <p:inputText id="purchasePrice"
+                                 value="#{itemController.navigationController.object.purchasePrice}"
+                                 valueChangeListener="#{itemController.onValueChanged}"
+                                 title="Purchase Price" style="width: 100%">
+                        <p:ajax update="saveItemButton cancelItemButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Sale Price" for="salePrice"/>
+                    <p:inputText id="salePrice"
+                                 value="#{itemController.navigationController.object.salePrice}"
+                                 valueChangeListener="#{itemController.onValueChanged}"
+                                 title="Sale Price" style="width: 100%">
+                        <p:ajax update="saveItemButton cancelItemButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Min. Stock" for="minStock"/>
+                    <p:inputText id="minStock"
+                                 value="#{itemController.navigationController.object.minStock}"
+                                 valueChangeListener="#{itemController.onValueChanged}"
+                                 title="Min. Stock" style="width: 100%">
+                        <p:ajax update="saveItemButton cancelItemButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Max. Stock" for="maxStock"/>
+                    <p:inputText id="maxStock"
+                                 value="#{itemController.navigationController.object.maxStock}"
+                                 valueChangeListener="#{itemController.onValueChanged}"
+                                 title="Max. Stock" style="width: 100%">
+                        <p:ajax update="saveItemButton cancelItemButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Effective Start Date"
+                                   for="effectiveStartDate"/>
+                    <p:calendar id="effectiveStartDate" pattern="dd MMM yyyy"
+                                value="#{itemController.navigationController.object.effectiveStartDate}"
+                                valueChangeListener="#{itemController.onValueChanged}"
+                                title="Effective Start Date" showWeek="true"
+                                showButtonPanel="true" navigator="true" showOn="button"
+                                readonlyInput="true" style="width: 100%" required="true">
+                        <p:ajax event="dateSelect" update="saveItemButton cancelItemButton"/>
+                    </p:calendar>
+                    <p:outputLabel value="Effective End Date" for="effectiveEndDate"/>
+                    <p:calendar id="effectiveEndDate" pattern="dd MMM yyyy"
+                                value="#{itemController.navigationController.object.effectiveEndDate}"
+                                valueChangeListener="#{itemController.onValueChanged}"
+                                title="Effective End Date" showWeek="true" showButtonPanel="true"
+                                navigator="true" showOn="button" readonlyInput="true"
+                                style="width: 100%">
+                        <p:ajax event="dateSelect" update="saveItemButton cancelItemButton"/>
+                    </p:calendar>
+                    <f:facet name="footer">
+                        <p:panel>
+                            <p:commandButton id="createItemButton" icon="ui-icon-plus"
+                                             value="Create" actionListener="#{itemController.prepareCreate}"
+                                             oncomplete="updateItemStock()"
+                                             process="@this" update="@form"/>
+                            <p:commandButton id="saveItemButton" icon="ui-icon-disk"
+                                             value="Save" actionListener="#{itemController.save}"
+                                             process="@this" update="@form"
+                                             disabled="#{empty itemController.dmlRecords}"/>
+                            <p:commandButton id="cancelItemButton"
+                                             icon="ui-icon-arrowreturn-1-w" value="Undo"
+                                             actionListener="#{itemController.undoChanges}" process="@this"
+                                             update="@form" oncomplete="updateItemStock()"
+                                             disabled="#{empty itemController.dmlRecords}" immediate="true"/>
+                            <p:commandButton id="deleteItemButton" icon="ui-icon-trash"
+                                             value="Delete" process="@this" immediate="true"
+                                             oncomplete="PF('confirmItemDeleteDialog').show()"
+                                             disabled="#{empty itemController.navigationController.object}"/>
+                        </p:panel>
+                    </f:facet>
+                </p:panelGrid>
+                <p:panel header="Item Stock">
+                    <p:remoteCommand name="disableButtons"
+                                     update=":ItemForm:itemstocklist:saveStockButton :ItemForm:itemstocklist:cancelStockButton"/>
+                    <p:dataTable id="itemstocklist" var="itemstock" value="#{itemStockController.stockDataModel}"
+                                 paginator="true" selectionMode="single"
+                                 selection="#{itemStockController.selected}" rowKey="#{itemstock.itemStockId}"
+                                 resizableColumns="true"
+                                 liveResize="true" rows="10" draggableColumns="true"
+                                 rowsPerPageTemplate="10,20,30,40,50" paginatorPosition="bottom"
+                                 editable="true" editMode="cell">
+                        <p:ajax event="rowSelect"
+                                update="saveStockButton cancelStockButton"/>
+                        <p:ajax event="rowUnselect"
+                                update="saveStockButton cancelStockButton"/>
+                        <p:ajax event="cellEdit" process="@this" listener="#{itemStockController.onCellEdit}"
+                                update="saveStockButton cancelStockButton"/>
+                        <p:column width="200" headerText="Stock Date">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{itemstock.itemStockDate}"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:calendar focusOnSelect="true" showButtonPanel="true"
+                                                pattern="dd MMM yyyy" showWeek="true" showOn="button"
+                                                navigator="true" value="#{itemstock.itemStockDate}"
+                                                required="true" readonlyInput="true" style="width:96%">
+                                        <p:ajax event="dateSelect" oncomplete="disableButtons()"/>
+                                    </p:calendar>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column width="150" headerText="Quantity">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{itemstock.qnty}" style="text-align: right;"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="itQnty" value="#{itemstock.qnty}"
+                                                 required="true" style="text-align: right; width: 96%">
+                                        <f:convertNumber pattern="###,###,###.##"/>
+                                        <p:ajax event="change" oncomplete="disableButtons()"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Remarks">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{itemstock.remarks}"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="itRemarks" value="#{itemstock.remarks}"
+                                                 style="width: 96%">
+                                        <p:ajax event="change" oncomplete="disableButtons()"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column width="100">
+                            <p:commandButton id="deleteStockButton"
+                                             actionListener="#{itemStockController.prepareDelete}"
+                                             icon="ui-icon-trash" value="Delete" process="@this" immediate="true"
+                                             oncomplete="PF('confirmStockDeleteDialog').show()"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createStockButton" icon="ui-icon-plus"
+                                             value="Create" actionListener="#{itemStockController.prepareCreate}"
+                                             process="@this" update=":growl,itemstocklist"/>
+                            <p:commandButton id="saveStockButton" icon="ui-icon-disk"
+                                             value="Save" actionListener="#{itemStockController.save}"
+                                             process="@this" update=":growl,itemstocklist"
+                                             disabled="#{empty itemStockController.dmlRecords}"/>
+                            <p:commandButton id="cancelStockButton"
+                                             icon="ui-icon-arrowreturn-1-w" value="Undo"
+                                             actionListener="#{itemStockController.undoChanges}"
+                                             process="@this" update=":growl,itemstocklist"
+                                             oncomplete="updateItemStock()" immediate="true"
+                                             disabled="#{empty itemStockController.dmlRecords}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </p:panel>
+        </h:form>
+        <ui:include src="ConfirmItemDelete.xhtml"/>
+        <ui:include src="ConfirmStockDelete.xhtml"/>
+    </ui:define>
+</ui:composition>
+</html>

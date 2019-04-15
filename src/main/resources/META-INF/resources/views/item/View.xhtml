@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ItemViewDlg" widgetVar="ItemViewDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.ViewItemTitle}">
+            <h:form id="ItemViewForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{itemController.selected != null}">
+                        <h:outputText value="#{bundle.ViewItemLabel_itemCode}"/>
+                        <h:outputText value="#{itemController.selected.itemCode}" title="#{bundle.ViewItemTitle_itemCode}"/>
+                        <h:outputText value="#{bundle.ViewItemLabel_itemBarcode}"/>
+                        <h:outputText value="#{itemController.selected.itemBarcode}" title="#{bundle.ViewItemTitle_itemBarcode}"/>
+                        <h:outputText value="#{bundle.ViewItemLabel_itemCategory}"/>
+                        <h:outputText value="#{itemController.selected.itemCategory}" title="#{bundle.ViewItemTitle_itemCategory}"/>
+                        <h:outputText value="#{bundle.ViewItemLabel_itemDesc}"/>
+                        <h:outputText value="#{itemController.selected.itemDesc}" title="#{bundle.ViewItemTitle_itemDesc}"/>
+                        <h:outputText value="#{bundle.ViewItemLabel_itemUom}"/>
+                        <h:outputText value="#{itemController.selected.itemUom}" title="#{bundle.ViewItemTitle_itemUom}"/>
+                        <h:outputText value="#{bundle.ViewItemLabel_purchasePrice}"/>
+                        <h:outputText value="#{itemController.selected.purchasePrice}" title="#{bundle.ViewItemTitle_purchasePrice}"/>
+                        <h:outputText value="#{bundle.ViewItemLabel_salePrice}"/>
+                        <h:outputText value="#{itemController.selected.salePrice}" title="#{bundle.ViewItemTitle_salePrice}"/>
+                        <h:outputText value="#{bundle.ViewItemLabel_minStock}"/>
+                        <h:outputText value="#{itemController.selected.minStock}" title="#{bundle.ViewItemTitle_minStock}"/>
+                        <h:outputText value="#{bundle.ViewItemLabel_maxStock}"/>
+                        <h:outputText value="#{itemController.selected.maxStock}" title="#{bundle.ViewItemTitle_maxStock}"/>
+                        <h:outputText value="#{bundle.ViewItemLabel_createdBy}"/>
+                        <h:outputText value="#{itemController.selected.createdBy}" title="#{bundle.ViewItemTitle_createdBy}"/>
+                        <h:outputText value="#{bundle.ViewItemLabel_creationDate}"/>
+                        <h:outputText value="#{itemController.selected.creationDate}" title="#{bundle.ViewItemTitle_creationDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewItemLabel_lastUpdatedBy}"/>
+                        <h:outputText value="#{itemController.selected.lastUpdatedBy}" title="#{bundle.ViewItemTitle_lastUpdatedBy}"/>
+                        <h:outputText value="#{bundle.ViewItemLabel_lastUpdateDate}"/>
+                        <h:outputText value="#{itemController.selected.lastUpdateDate}" title="#{bundle.ViewItemTitle_lastUpdateDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewItemLabel_effectiveStartDate}"/>
+                        <h:outputText value="#{itemController.selected.effectiveStartDate}" title="#{bundle.ViewItemTitle_effectiveStartDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                        <h:outputText value="#{bundle.ViewItemLabel_effectiveEndDate}"/>
+                        <h:outputText value="#{itemController.selected.effectiveEndDate}" title="#{bundle.ViewItemTitle_effectiveEndDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm:ss" />
+                        </h:outputText>
+                    </p:panelGrid>
+                    <p:commandButton value="#{bundle.Close}" onclick="ItemViewDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

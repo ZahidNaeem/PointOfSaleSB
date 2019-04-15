@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ItemCreateDlg" widgetVar="ItemCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateItemTitle}">
+            <h:form id="ItemCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{itemController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateItemLabel_itemCode}" for="itemCode" />
+                        <p:inputText id="itemCode" value="#{itemController.selected.itemCode}" title="#{bundle.CreateItemTitle_itemCode}" required="true" requiredMessage="#{bundle.CreateItemRequiredMessage_itemCode}"/>
+                        <p:outputLabel value="#{bundle.CreateItemLabel_itemBarcode}" for="itemBarcode" />
+                        <p:inputText id="itemBarcode" value="#{itemController.selected.itemBarcode}" title="#{bundle.CreateItemTitle_itemBarcode}" />
+                        <p:outputLabel value="#{bundle.CreateItemLabel_itemCategory}" for="itemCategory" />
+                        <p:inputText id="itemCategory" value="#{itemController.selected.itemCategory}" title="#{bundle.CreateItemTitle_itemCategory}" />
+                        <p:outputLabel value="#{bundle.CreateItemLabel_itemDesc}" for="itemDesc" />
+                        <p:inputText id="itemDesc" value="#{itemController.selected.itemDesc}" title="#{bundle.CreateItemTitle_itemDesc}" />
+                        <p:outputLabel value="#{bundle.CreateItemLabel_itemUom}" for="itemUom" />
+                        <p:inputText id="itemUom" value="#{itemController.selected.itemUom}" title="#{bundle.CreateItemTitle_itemUom}" />
+                        <p:outputLabel value="#{bundle.CreateItemLabel_purchasePrice}" for="purchasePrice" />
+                        <p:inputText id="purchasePrice" value="#{itemController.selected.purchasePrice}" title="#{bundle.CreateItemTitle_purchasePrice}" />
+                        <p:outputLabel value="#{bundle.CreateItemLabel_salePrice}" for="salePrice" />
+                        <p:inputText id="salePrice" value="#{itemController.selected.salePrice}" title="#{bundle.CreateItemTitle_salePrice}" />
+                        <p:outputLabel value="#{bundle.CreateItemLabel_minStock}" for="minStock" />
+                        <p:inputText id="minStock" value="#{itemController.selected.minStock}" title="#{bundle.CreateItemTitle_minStock}" />
+                        <p:outputLabel value="#{bundle.CreateItemLabel_maxStock}" for="maxStock" />
+                        <p:inputText id="maxStock" value="#{itemController.selected.maxStock}" title="#{bundle.CreateItemTitle_maxStock}" />
+                        <p:outputLabel value="#{bundle.CreateItemLabel_createdBy}" for="createdBy" />
+                        <p:inputText id="createdBy" value="#{itemController.selected.createdBy}" title="#{bundle.CreateItemTitle_createdBy}" />
+                        <p:outputLabel value="#{bundle.CreateItemLabel_creationDate}" for="creationDate" />
+                        <p:calendar id="creationDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{itemController.selected.creationDate}" title="#{bundle.EditItemTitle_creationDate}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateItemLabel_lastUpdatedBy}" for="lastUpdatedBy" />
+                        <p:inputText id="lastUpdatedBy" value="#{itemController.selected.lastUpdatedBy}" title="#{bundle.CreateItemTitle_lastUpdatedBy}" />
+                        <p:outputLabel value="#{bundle.CreateItemLabel_lastUpdateDate}" for="lastUpdateDate" />
+                        <p:calendar id="lastUpdateDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{itemController.selected.lastUpdateDate}" title="#{bundle.EditItemTitle_lastUpdateDate}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateItemLabel_effectiveStartDate}" for="effectiveStartDate" />
+                        <p:calendar id="effectiveStartDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{itemController.selected.effectiveStartDate}" title="#{bundle.EditItemTitle_effectiveStartDate}"  showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateItemLabel_effectiveEndDate}" for="effectiveEndDate" />
+                        <p:calendar id="effectiveEndDate" pattern="MM/dd/yyyy HH:mm:ss" value="#{itemController.selected.effectiveEndDate}" title="#{bundle.EditItemTitle_effectiveEndDate}"  showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{itemController.create}" value="#{bundle.Save}" update="display,:ItemListForm:datalist,:growl" oncomplete="handleSubmit(args,'ItemCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ItemCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
