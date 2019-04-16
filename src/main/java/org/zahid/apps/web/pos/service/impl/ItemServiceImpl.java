@@ -1,7 +1,7 @@
 package org.zahid.apps.web.pos.service.impl;
 
-import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.zahid.apps.web.pos.controller.SecurityController;
@@ -13,13 +13,14 @@ import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @Service
 public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ItemRepo itemRepo;
-    private final Logger logger = Logger.getLogger(ItemServiceImpl.class.getName());
+    private final Logger LOG = Logger.getLogger(ItemServiceImpl.class.getName());
 
     private Sort orderBy(String column) {
         return new Sort(Sort.Direction.ASC, column);
@@ -32,44 +33,24 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getItems() {
-        List<Item> items = itemRepo.findAll(orderBy("itemCode"));
-        return items;
+        return itemRepo.findAll(orderBy("itemCode"));
     }
 
     @Override
     public Item findById(Long id) {
-        Item item = itemRepo.getOne(id);
-        return item;
+        return itemRepo.getOne(id);
     }
 
     @Override
-    public Item save(Item item) {
-        String user = (new SecurityController()).getUsername();
-        logger.info("User: " + user);
-        Timestamp currTime = new Timestamp(System.currentTimeMillis());
-        if (item.getItemCode() == null || !itemRepo.existsById(item.getItemCode())) {
-            item.setCreatedBy(user);
-            item.setCreationDate(currTime);
-        }
-        item.setLastUpdatedBy(user);
-        item.setLastUpdateDate(currTime);
+    public Item save(Item item) throws DataIntegrityViolationException {
+        updateWhoColumns(item);
         return itemRepo.save(item);
     }
 
     @Override
-    public List<Item> save(Set<Item> items) {
-        items.forEach(item -> {
-            String user = (new SecurityController()).getUsername();
-            Timestamp currTime = new Timestamp(System.currentTimeMillis());
-            if (item.getItemCode() == null || !itemRepo.existsById(item.getItemCode())) {
-                item.setCreatedBy(user);
-                item.setCreationDate(currTime);
-            }
-            item.setLastUpdatedBy(user);
-            item.setLastUpdateDate(currTime);
-            itemRepo.saveAndFlush(item);
-        });
-        return (List<Item>) items;
+    public List<Item> save(Set<Item> items) throws DataIntegrityViolationException {
+        items.forEach(item -> updateWhoColumns(item));
+        return itemRepo.saveAll(items);
     }
 
     @Override
@@ -104,7 +85,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Set<String> getItemCategories() {
-        Set<String> cats = new HashSet<String>();
+        Set<String> cats = new HashSet<>();
         for (Item item : itemRepo.findAll()) {
             cats.add(item.getItemCategory());
         }
@@ -113,11 +94,21 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Set<String> getItemUOM() {
-        Set<String> uoms = new HashSet<String>();
+        Set<String> uoms = new HashSet<>();
         for (Item item : itemRepo.findAll()) {
             uoms.add(item.getItemUom());
         }
         return uoms;
     }
 
+    private void updateWhoColumns(Item item) {
+        String user = (new SecurityController()).getUsername();
+        Timestamp currTime = new Timestamp(System.currentTimeMillis());
+        if (item.getItemCode() == null || !itemRepo.existsById(item.getItemCode())) {
+            item.setCreatedBy(user);
+            item.setCreationDate(currTime);
+        }
+        item.setLastUpdatedBy(user);
+        item.setLastUpdateDate(currTime);
+    }
 }

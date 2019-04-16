@@ -1,9 +1,11 @@
 package org.zahid.apps.web.pos.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.zahid.apps.web.pos.entity.Item;
 import org.zahid.apps.web.pos.service.ItemService;
 import org.zahid.apps.web.pos.utils.JsfUtils;
+import org.zahid.apps.web.pos.utils.Miscellaneous;
 import org.zahid.apps.web.pos.utils.NavigationController;
 
 import javax.annotation.PostConstruct;
@@ -141,9 +143,14 @@ public class ItemController implements Serializable {
 
     public void save() {
         if (dmlRecords.size() > 0) {
-            itemService.save(dmlRecords);//                LOG.info("Item Code: " + item.getItemCode() + " with barcode: " + item.getItemBarcode() + " saved successfully");
-            JsfUtils.showMessage(FacesMessage.SEVERITY_INFO, "Item(s) saved successfully");
-            dmlRecords.clear();
+            try {
+                itemService.save(dmlRecords);
+                dmlRecords.clear();
+                JsfUtils.showMessage(FacesMessage.SEVERITY_INFO, "Save Successful", "Item(s) saved successfully");
+            } catch (DataIntegrityViolationException e) {
+                Exception ex = Miscellaneous.getNestedException(e);
+                JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", ex.getMessage());
+            }
         }
     }
 

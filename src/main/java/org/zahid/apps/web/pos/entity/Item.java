@@ -17,7 +17,7 @@ public class Item implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @SequenceGenerator(name = "XXIM_ITEMS_ITEMCODE_GENERATOR", sequenceName="XXIM_ITEMS_ITEMCODE_GENERATOR", allocationSize=1)
+    @SequenceGenerator(name = "XXIM_ITEMS_ITEMCODE_GENERATOR", sequenceName = "XXIM_ITEMS_ITEMCODE_GENERATOR", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XXIM_ITEMS_ITEMCODE_GENERATOR")
     @Column(name = "ITEM_CODE")
     private Long itemCode;
@@ -42,7 +42,7 @@ public class Item implements Serializable {
     @Column(name = "ITEM_CATEGORY")
     private String itemCategory;
 
-    @Column(name = "ITEM_DESC")
+    @Column(name = "ITEM_DESC", unique = true)
     private String itemDesc;
 
     @Column(name = "ITEM_UOM")
