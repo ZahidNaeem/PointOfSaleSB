@@ -2,6 +2,7 @@ package org.zahid.apps.web.pos.service.impl;
 
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.zahid.apps.web.pos.controller.ItemController;
 import org.zahid.apps.web.pos.controller.SecurityController;
@@ -74,11 +75,11 @@ public class ItemStockServiceImpl implements ItemStockService {
         return stock;
     }
 
-    @Override
-    public List<ItemStock> attachStockWithItem(List<ItemStock> stocks) {
-        itemController.getNavigationController().object.getItemStocks().addAll(stocks);
-        return stocks;
-    }
+//    @Override
+//    public List<ItemStock> attachStockWithItem(List<ItemStock> stocks) {
+//        --itemController.getNavigationController().object.getItemStocks().addAll(stocks);
+//        return stocks;
+//    }
 
     //	@Override
 //	public ItemStock prepareCreate() {
@@ -120,32 +121,32 @@ public class ItemStockServiceImpl implements ItemStockService {
     }
 
     @Override
-    public void delete(ItemStock itemStock) {
+    public void delete(ItemStock itemStock) throws DataIntegrityViolationException {
         itemStockRepo.delete(itemStock);
     }
 
     @Override
-    public void delete(Set<ItemStock> itemStocks) {
+    public void delete(Set<ItemStock> itemStocks) throws DataIntegrityViolationException {
         itemStockRepo.deleteAll(itemStocks);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws DataIntegrityViolationException {
         itemStockRepo.deleteById(id);
     }
 
     @Override
-    public void deleteAll() {
+    public void deleteAll() throws DataIntegrityViolationException {
         itemStockRepo.deleteAll();
     }
 
     @Override
-    public void deleteAllInBatch() {
+    public void deleteAllInBatch() throws DataIntegrityViolationException {
         itemStockRepo.deleteAllInBatch();
     }
 
     @Override
-    public void deleteInBatch(Set<ItemStock> itemStocks) {
+    public void deleteInBatch(Set<ItemStock> itemStocks) throws DataIntegrityViolationException {
         itemStockRepo.deleteInBatch(itemStocks);
     }
 

@@ -3,11 +3,13 @@ package org.zahid.apps.web.pos.controller;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.zahid.apps.web.pos.entity.Item;
 import org.zahid.apps.web.pos.entity.ItemStock;
 import org.zahid.apps.web.pos.service.ItemStockService;
 import org.zahid.apps.web.pos.utils.JsfUtils;
+import org.zahid.apps.web.pos.utils.Miscellaneous;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -30,7 +32,6 @@ import java.util.logging.Logger;
 // @Join(path = "/items", to = "/views/item/itemList.jsf")
 public class ItemStockController implements Serializable {
 
-    @Autowired
     private ItemStockService itemStockService;
     //    @Autowired
 //    private ItemController itemController;
@@ -53,10 +54,15 @@ public class ItemStockController implements Serializable {
         // stockDataModel.setWrappedData(itemStocks);
     }
 
-    //    public Item getItem() {
-//        item = itemController.getNavigationController().object;
-//        return item;
-//    }
+    public ItemStockController() {
+
+    }
+
+    @Autowired
+    public ItemStockController(ItemStockService itemStockService) {
+        this.itemStockService = itemStockService;
+    }
+
     public List<ItemStock> getStockList() {
         return stockList;
     }
@@ -160,7 +166,16 @@ public class ItemStockController implements Serializable {
             LOG.log(Level.INFO, "Selected Row: {0}", selected.getItemStockId());
             LOG.log(Level.INFO, "Stock before: {0}", stockList.size());
             if (itemStockService.exists(selected.getItemStockId())) {
-                itemStockService.delete(selected);
+                boolean removed = true;
+                try {
+                    itemStockService.delete(selected);
+                } catch (DataIntegrityViolationException e) {
+                    JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
+                    removed = false;
+                }
+                if (!removed) {
+                    return;
+                }
             }
             stockList.remove(selected);
             LOG.log(Level.INFO, "Stock after: {0}", stockList.size());
@@ -169,12 +184,14 @@ public class ItemStockController implements Serializable {
 
     public void save() {
         if (dmlRecords.size() > 0) {
-            itemStockService.attachStockWithItem(itemStockService.save(dmlRecords));
-//            .forEach((stock) -> {
-//                LOG.log(Level.INFO, "Stock Code: {0} saved successfully", stock.getItemStockId());
-//            });
-            JsfUtils.showMessage(FacesMessage.SEVERITY_INFO, "Item Stock(s) saved successfully");
-            dmlRecords.clear();
+            try {
+                List<ItemStock> stocks = itemStockService.save(dmlRecords);
+//                itemStockService.attachStockWithItem(stocks);
+                JsfUtils.showMessage(FacesMessage.SEVERITY_INFO, "Item Stock(s) saved successfully");
+                dmlRecords.clear();
+            } catch (DataIntegrityViolationException e) {
+                JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
+            }
         }
     }
 

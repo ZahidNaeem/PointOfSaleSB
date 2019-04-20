@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 //@Controller
@@ -30,7 +31,6 @@ import java.util.logging.Logger;
 //@Join(path = "/items", to = "/views/item/itemList.jsf")
 public class ItemController implements Serializable {
 
-    @Autowired
     private ItemService itemService;
     //    @Autowired
 //    private ItemStockController itemStockController;
@@ -45,11 +45,16 @@ public class ItemController implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(ItemController.class.getName());
 
-    // public void updateDataModel(List<Item> items) {
-    // // itemDataModel = null;
-    // // itemDataModel = new ListDataModel<Item>(items);
-    // navigationController = new NavigationController<Item>(items);
-    // }
+
+    public ItemController() {
+
+    }
+
+    @Autowired
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
+    }
+
     //     @Deferred
     // @RequestAction
     // @IgnorePostback
@@ -72,10 +77,20 @@ public class ItemController implements Serializable {
         int indx;
         if (operation.equalsIgnoreCase("DELETE")) {
             indx = items.indexOf(item);
+            boolean removed = true;
             if (itemService.exists(item.getItemCode())) {
-                itemService.delete(item);
+                try {
+                    itemService.delete(item);
+                } catch (DataIntegrityViolationException e) {
+                    JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
+                    removed = false;
+                }
+            }
+            if (!removed) {
+                return;
             }
             items.remove(indx);
+            LOG.log(Level.INFO, "items.remove(indx) executed");
             if ((indx - 1) >= 0) {
                 navigationController.go(indx - 1);
             }
@@ -148,8 +163,7 @@ public class ItemController implements Serializable {
                 dmlRecords.clear();
                 JsfUtils.showMessage(FacesMessage.SEVERITY_INFO, "Save Successful", "Item(s) saved successfully");
             } catch (DataIntegrityViolationException e) {
-                Exception ex = Miscellaneous.getNestedException(e);
-                JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", ex.getMessage());
+                JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
             }
         }
     }

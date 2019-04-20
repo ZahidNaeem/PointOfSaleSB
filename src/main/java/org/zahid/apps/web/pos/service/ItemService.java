@@ -7,29 +7,29 @@ import java.util.Set;
 
 public interface ItemService {
 
-	public boolean exists(Long id);
+    public boolean exists(Long id);
 
-	public Item findById(Long id);
+    public Item findById(Long id);
 
-	public List<Item> getItems();
+    public List<Item> getItems();
 
-	public Set<String> getItemCategories();
+    public Set<String> getItemCategories();
 
-	public Set<String> getItemUOM();
+    public Set<String> getItemUOM();
 
-	public Item save(Item item);
+    public Item save(Item item);
 
-	public List<Item> save(Set<Item> items);
+    public List<Item> save(Set<Item> items);
 
-	public void delete(Item item);
+    public void delete(Item item);
 
-	public void delete(Set<Item> items);
+    public void delete(Set<Item> items);
 
-	public void deleteById(Long id);
+    public void deleteById(Long id);
 
-	public void deleteAll();
+    public void deleteAll();
 
-	public void deleteAllInBatch();
+    public void deleteAllInBatch();
 
-	public void deleteInBatch(Set<Item> items);
+    public void deleteInBatch(Set<Item> items);
 }

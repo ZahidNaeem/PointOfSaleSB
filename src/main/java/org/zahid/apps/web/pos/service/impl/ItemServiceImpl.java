@@ -18,9 +18,17 @@ import java.util.logging.Logger;
 @Service
 public class ItemServiceImpl implements ItemService {
 
-    @Autowired
     private ItemRepo itemRepo;
     private final Logger LOG = Logger.getLogger(ItemServiceImpl.class.getName());
+
+    public ItemServiceImpl() {
+
+    }
+
+    @Autowired
+    public ItemServiceImpl(ItemRepo itemRepo) {
+        this.itemRepo = itemRepo;
+    }
 
     private Sort orderBy(String column) {
         return new Sort(Sort.Direction.ASC, column);
@@ -54,32 +62,32 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void delete(Item item) {
+    public void delete(Item item) throws DataIntegrityViolationException {
         itemRepo.delete(item);
     }
 
     @Override
-    public void delete(Set<Item> items) {
+    public void delete(Set<Item> items) throws DataIntegrityViolationException {
         itemRepo.deleteAll(items);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long id) throws DataIntegrityViolationException {
         itemRepo.deleteById(id);
     }
 
     @Override
-    public void deleteAll() {
+    public void deleteAll() throws DataIntegrityViolationException {
         itemRepo.deleteAll();
     }
 
     @Override
-    public void deleteAllInBatch() {
+    public void deleteAllInBatch() throws DataIntegrityViolationException {
         itemRepo.deleteAllInBatch();
     }
 
     @Override
-    public void deleteInBatch(Set<Item> items) {
+    public void deleteInBatch(Set<Item> items) throws DataIntegrityViolationException {
         itemRepo.deleteInBatch(items);
     }
 

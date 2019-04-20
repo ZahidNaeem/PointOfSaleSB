@@ -26,7 +26,7 @@ public interface ItemStockService {
 
     public ItemStock attachStockWithItem(ItemStock stock);
 
-    public List<ItemStock> attachStockWithItem(List<ItemStock> stocks);
+//    public List<ItemStock> attachStockWithItem(List<ItemStock> stocks);
 
 //    public List<ItemStock> findAllByItem(Item item);
 
