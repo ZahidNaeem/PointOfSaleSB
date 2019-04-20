@@ -38,7 +38,6 @@ public class Miscellaneous {
         rbList.add(Miscellaneous.getResourceBundle("dbconstraints"));
         rbList.add(Miscellaneous.getResourceBundle("dberrors"));
 
-//        final boolean[] found = {false};
 //        rbList.stream().filter(f -> false == found[0]).forEach(rb -> {
         rbList.forEach(rb -> {
             rb.keySet().stream().filter(s -> errorMessage.toUpperCase().contains(s.toUpperCase())).map(s -> Miscellaneous.getResourceMessage(rb.getBaseBundleName(), s)).forEach(message -> {
