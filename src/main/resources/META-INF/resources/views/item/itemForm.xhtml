@@ -24,19 +24,27 @@
                 <p:commandButton value="First"
                                  actionListener="#{itemController.navigationController.first()}"
                                  disabled="#{itemController.navigationController.firstDisabled}"
-                                 process="@this" oncomplete="updateItemStock()" update="@form"/>
+                                 partialSubmit="true" process="@this"
+                                 oncomplete="updateItemStock()" update="@form"/>
                 <p:commandButton value="Previous"
                                  actionListener="#{itemController.navigationController.previous()}"
                                  disabled="#{itemController.navigationController.previousDisabled}"
-                                 process="@this" oncomplete="updateItemStock()" update="@form"/>
+                                 partialSubmit="true" process="@this"
+                                 oncomplete="updateItemStock()" update="@form"/>
                 <p:commandButton value="Next"
                                  actionListener="#{itemController.navigationController.next()}"
                                  disabled="#{itemController.navigationController.nextDisabled}"
-                                 process="@this" oncomplete="updateItemStock()" update="@form"/>
+                                 partialSubmit="true" process="@this"
+                                 oncomplete="updateItemStock()" update="@form"/>
                 <p:commandButton value="Last"
                                  actionListener="#{itemController.navigationController.last()}"
                                  disabled="#{itemController.navigationController.lastDisabled}"
-                                 process="@this" oncomplete="updateItemStock()" update="@form"/>
+                                 partialSubmit="true" process="@this"
+                                 oncomplete="updateItemStock()" update="@form"/>
+                <p:commandButton value="Refresh"
+                                 actionListener="#{itemController.loadData}"
+                                 partialSubmit="true" process="@this"
+                                 oncomplete="updateItemStock()" update="@form"/>
                 <p:commandButton value="Print" rendered="false">
                     <p:printer target=":confirmItemDeleteDlg"/>
                 </p:commandButton>
@@ -48,7 +56,7 @@
                     <p:outputLabel value="Item Code"/>
                     <h:outputText
                             value="#{itemController.navigationController.object.itemCode}"
-                            style="display: block; width: 100%;#{itemController.navigationController.object.creationDate != null ? 'color:unset' : 'color:White'}"/>
+                            style="display: block; width: 100%;"/>
                     <p:outputLabel value="Item Barcode" for="itemBarcode"/>
                     <p:inputText id="itemBarcode"
                                  value="#{itemController.navigationController.object.itemBarcode}"
@@ -135,18 +143,22 @@
                             <p:commandButton id="createItemButton" icon="ui-icon-plus"
                                              value="Create" actionListener="#{itemController.prepareCreate}"
                                              oncomplete="updateItemStock()"
-                                             process="@this" update="@form"/>
+                                             partialSubmit="true" process="@this" update="@form"/>
                             <p:commandButton id="saveItemButton" icon="ui-icon-disk"
                                              value="Save" actionListener="#{itemController.save}"
-                                             process="@this" update="@form"
-                                             disabled="#{empty itemController.dmlRecords}"/>
+                                             partialSubmit="true" process="@this" update="@form"
+                                             immediate="true"
+                                             disabled="#{empty itemController.dmlRecords}">
+                                <f:ajax/>
+                            </p:commandButton>
                             <p:commandButton id="cancelItemButton"
                                              icon="ui-icon-arrowreturn-1-w" value="Undo"
                                              actionListener="#{itemController.undoChanges}" process="@this"
-                                             update="@form" oncomplete="updateItemStock()"
+                                             partialSubmit="true" update="@form" oncomplete="updateItemStock()"
                                              disabled="#{empty itemController.dmlRecords}" immediate="true"/>
                             <p:commandButton id="deleteItemButton" icon="ui-icon-trash"
-                                             value="Delete" process="@this" immediate="true"
+                                             partialSubmit="true" value="Delete"
+                                             process="@this" immediate="true"
                                              oncomplete="PF('confirmItemDeleteDialog').show()"
                                              disabled="#{empty itemController.navigationController.object}"/>
                         </p:panel>
@@ -213,21 +225,22 @@
                         <p:column width="100">
                             <p:commandButton id="deleteStockButton"
                                              actionListener="#{itemStockController.prepareDelete}"
-                                             icon="ui-icon-trash" value="Delete" process="@this" immediate="true"
+                                             icon="ui-icon-trash" value="Delete"
+                                             partialSubmit="true" process="@this" immediate="true"
                                              oncomplete="PF('confirmStockDeleteDialog').show()"/>
                         </p:column>
                         <f:facet name="footer">
                             <p:commandButton id="createStockButton" icon="ui-icon-plus"
                                              value="Create" actionListener="#{itemStockController.prepareCreate}"
-                                             process="@this" update=":growl,itemstocklist"/>
+                                             partialSubmit="true" process="@this" update=":growl,itemstocklist"/>
                             <p:commandButton id="saveStockButton" icon="ui-icon-disk"
                                              value="Save" actionListener="#{itemStockController.save}"
-                                             process="@this" update=":growl,itemstocklist"
+                                             partialSubmit="true" process="@this" update=":growl,itemstocklist"
                                              disabled="#{empty itemStockController.dmlRecords}"/>
                             <p:commandButton id="cancelStockButton"
                                              icon="ui-icon-arrowreturn-1-w" value="Undo"
                                              actionListener="#{itemStockController.undoChanges}"
-                                             process="@this" update=":growl,itemstocklist"
+                                             partialSubmit="true" process="@this" update=":growl,itemstocklist"
                                              oncomplete="updateItemStock()" immediate="true"
                                              disabled="#{empty itemStockController.dmlRecords}"/>
                         </f:facet>

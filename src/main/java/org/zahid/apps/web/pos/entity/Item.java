@@ -12,13 +12,17 @@ import java.util.List;
  */
 @Entity
 @Table(name = "XXIM_ITEMS")
-@NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i")
+@NamedQueries({
+        @NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i"),
+        @NamedQuery(name = "Item.generateID", query = "SELECT max(itemCode) + 1 FROM Item i"),
+        @NamedQuery(name = "Item.getCategories", query = "SELECT distinct i.itemCategory FROM Item i where i.itemCategory is not null")
+})
 public class Item implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @SequenceGenerator(name = "XXIM_ITEMS_ITEMCODE_GENERATOR", sequenceName = "XXIM_ITEMS_ITEMCODE_GENERATOR", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XXIM_ITEMS_ITEMCODE_GENERATOR")
+//    @SequenceGenerator(name = "XXIM_ITEMS_ITEMCODE_GENERATOR", sequenceName = "XXIM_ITEMS_ITEMCODE_GENERATOR", allocationSize = 1)
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XXIM_ITEMS_ITEMCODE_GENERATOR")
     @Column(name = "ITEM_CODE")
     private Long itemCode;
 
@@ -234,6 +238,6 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "org.zahid.apps.web.pos.entity.Item[ itemCode=" + itemCode + " ]";
+        return "org.zahid.apps.web.pos.entity.Item[ itemCode=" + itemCode + " & itemDesc=" + itemDesc + " ]";
     }
 }

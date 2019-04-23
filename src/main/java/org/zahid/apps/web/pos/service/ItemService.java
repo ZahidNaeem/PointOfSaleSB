@@ -7,6 +7,8 @@ import java.util.Set;
 
 public interface ItemService {
 
+    Long generateID();
+
     public boolean exists(Long id);
 
     public Item findById(Long id);

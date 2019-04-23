@@ -105,6 +105,7 @@ public class ItemStockServiceImpl implements ItemStockService {
     @Override
     public List<ItemStock> save(Set<ItemStock> itemStocks) {
         if (itemController.getDmlRecords().size() > 0) {
+            System.out.println("Items: " + itemController.getDmlRecords().size());
             itemController.save();
         }
         for (ItemStock itemStock : itemStocks) {

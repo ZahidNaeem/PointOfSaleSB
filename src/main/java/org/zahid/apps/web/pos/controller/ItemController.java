@@ -14,7 +14,6 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,8 +39,10 @@ public class ItemController implements Serializable {
     // private Set<String> itemCats;
     // private Set<String> itemUoms;
     private final Set<Item> dmlRecords = new HashSet<>();
+
     // private Item selected;
     // private Set<Long> updatedItemCodes = new HashSet<>();
+    private boolean required = false;
 
     private static final Logger LOG = Logger.getLogger(ItemController.class.getName());
 
@@ -102,6 +103,10 @@ public class ItemController implements Serializable {
         }
     }
 
+    public boolean isRequired() {
+        return required;
+    }
+
     public List<Item> getItems() {
         return items;
     }
@@ -124,23 +129,42 @@ public class ItemController implements Serializable {
 
     public void prepareCreate() {
         Item item = new Item();
-        item.setItemDesc("Desc");
-        item.setItemUom("Item");
-        item.setEffectiveStartDate(new Date());
-//        item.setItemCode(Long.parseLong("-" + items.size()));
+//        item.setItemDesc("Desc");
+//        item.setItemUom("Item");
+//        item.setEffectiveStartDate(new Date());
+        item.setItemCode(itemService.generateID() > (items.size() + 1) ? itemService.generateID() : (items.size() + 1));
         items.add(item);
         navigationController = new NavigationController<>(items, items.indexOf(item));
         dmlRecords.add(item);
     }
 
     public void onValueChanged(ValueChangeEvent vce) {
-//        LOG.info("Component: " + vce.getComponent().getClientId());
-//        LOG.info("Old Value: " + vce.getOldValue());
-//        LOG.info("New Value: " + vce.getNewValue());
+        LOG.info("*************** onValueChanged Start ***************");
+        LOG.info("Component: " + vce.getComponent().getClientId());
+        LOG.info("Old Value: " + vce.getOldValue());
+        LOG.info("New Value: " + vce.getNewValue());
         // Long itemCode = navigationController.getList().getRowData().getItemCode();
         // logger.info("Item Code: " + itemCode);
+//        String[] compareItem = {null};
+//        if (vce.getComponent().getClientId().equalsIgnoreCase("ItemForm:itemDesc")) {
+//            LOG.info("Item Desc. Component");
+//            compareItem[0] = String.valueOf(vce.getOldValue());
+//        } else {
+//            LOG.info("Other Component");
+//            compareItem[0] = navigationController.object.getItemDesc();
+//        }
+//        LOG.log(Level.INFO, "vce dmlRecords before: {0}", dmlRecords.size());
+//        dmlRecords.forEach(item -> {
+//            LOG.log(Level.INFO, "Component comparison: {0}", compareItem[0].equalsIgnoreCase(item.getItemDesc()));
+//            if (compareItem[0].equalsIgnoreCase(item.getItemDesc())) {
+//                LOG.log(Level.INFO, "Item to remove: {0}", item.toString());
+//                dmlRecords.remove(item);
+//            }
+//        });
+//        LOG.log(Level.INFO, "vce dmlRecords after: {0}", dmlRecords.size());
         dmlRecords.add(navigationController.object);
         // updatedItemCodes.add(itemCode);
+        LOG.info("*************** onValueChanged End ***************");
     }
 
     public void onValueChanged(AjaxBehaviorEvent event) {
@@ -157,15 +181,33 @@ public class ItemController implements Serializable {
     }
 
     public void save() {
+        LOG.info("*************** Save Start ***************");
         if (dmlRecords.size() > 0) {
+//            dmlRecords.forEach(rec -> {
+//                LOG.log(Level.INFO, "Hash Code: {0}", rec.hashCode());
+//                LOG.log(Level.INFO, "Item: {0}", rec.toString());
+//                try {
+//                    itemService.save(rec);
+//                    dmlRecords.clear();
+//                    JsfUtils.showMessage(FacesMessage.SEVERITY_INFO, "Save Successful", "Item(s) saved successfully");
+//                } catch (DataIntegrityViolationException e) {
+//                    JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
+//                }
+//            });
             try {
+                required = true;
                 itemService.save(dmlRecords);
                 dmlRecords.clear();
                 JsfUtils.showMessage(FacesMessage.SEVERITY_INFO, "Save Successful", "Item(s) saved successfully");
             } catch (DataIntegrityViolationException e) {
                 JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
+            } catch (Exception e) {
+                JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
+            } finally {
+                required = false;
             }
         }
+        LOG.info("*************** Save End ***************");
     }
 
     public void undoChanges() {

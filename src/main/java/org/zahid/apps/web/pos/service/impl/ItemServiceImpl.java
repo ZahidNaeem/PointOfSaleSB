@@ -35,6 +35,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public Long generateID() {
+        return itemRepo.generateID();
+    }
+
+    @Override
     public boolean exists(Long id) {
         return itemRepo.existsById(id);
     }
@@ -58,7 +63,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<Item> save(Set<Item> items) throws DataIntegrityViolationException {
         items.forEach(item -> updateWhoColumns(item));
-        return itemRepo.saveAll(items);
+        List<Item> returnItems = itemRepo.saveAll(items);
+        return returnItems;
     }
 
     @Override
@@ -94,9 +100,10 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Set<String> getItemCategories() {
         Set<String> cats = new HashSet<>();
-        for (Item item : itemRepo.findAll()) {
-            cats.add(item.getItemCategory());
-        }
+        cats.addAll(itemRepo.getCategories());
+//        for (Item item : itemRepo.findAll()) {
+//            cats.add(item.getItemCategory());
+//        }
         return cats;
     }
 
