@@ -67,7 +67,7 @@
                     <p:outputLabel value="Item Desc." for="itemDesc"/>
                     <p:inputText id="itemDesc"
                                  value="#{itemController.navigationController.object.itemDesc}"
-                                 required="true"
+                                 required="#{!empty param['validateItemOnSave']}"
                                  valueChangeListener="#{itemController.onValueChanged}"
                                  title="Item Desc." style="width: 100%">
                         <p:ajax update="saveItemButton cancelItemButton"/>
@@ -85,7 +85,7 @@
                     <p:selectOneMenu id="itemUom"
                                      value="#{itemController.navigationController.object.itemUom}"
                                      valueChangeListener="#{itemController.onValueChanged}"
-                                     filter="true" editable="true" required="true"
+                                     filter="true" editable="true" required="#{!empty param['validateItemOnSave']}"
                                      style="width: fit-content">
                         <p:ajax update="saveItemButton cancelItemButton"/>
                         <f:selectItems value="#{itemController.itemUoms}" var="uom"
@@ -126,7 +126,8 @@
                                 valueChangeListener="#{itemController.onValueChanged}"
                                 title="Effective Start Date" showWeek="true"
                                 showButtonPanel="true" navigator="true" showOn="button"
-                                readonlyInput="true" style="width: 100%" required="true">
+                                readonlyInput="true" style="width: 100%"
+                                required="#{!empty param['validateItemOnSave']}">
                         <p:ajax event="dateSelect" update="saveItemButton cancelItemButton"/>
                     </p:calendar>
                     <p:outputLabel value="Effective End Date" for="effectiveEndDate"/>
@@ -149,7 +150,7 @@
                                              partialSubmit="true" process="@this" update="@form"
                                              immediate="true"
                                              disabled="#{empty itemController.dmlRecords}">
-                                <f:ajax/>
+                                <f:param name="validateItemOnSave" value="true"/>
                             </p:commandButton>
                             <p:commandButton id="cancelItemButton"
                                              icon="ui-icon-arrowreturn-1-w" value="Undo"
