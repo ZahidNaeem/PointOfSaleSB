@@ -8,6 +8,8 @@ import java.util.Set;
 
 public interface ItemStockService {
 
+    public Long generateID();
+
     public boolean exists(Long id);
 
     public List<ItemStock> getItemStockList();

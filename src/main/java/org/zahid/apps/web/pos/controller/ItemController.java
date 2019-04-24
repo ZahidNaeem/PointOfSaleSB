@@ -132,7 +132,7 @@ public class ItemController implements Serializable {
 //        item.setItemDesc("Desc");
 //        item.setItemUom("Item");
 //        item.setEffectiveStartDate(new Date());
-        item.setItemCode(itemService.generateID() > (items.size() + 1) ? itemService.generateID() : (items.size() + 1));
+        item.setItemCode(itemService.generateID() >= (items.size() + 1) ? itemService.generateID() : (items.size() + 1));
         items.add(item);
         navigationController = new NavigationController<>(items, items.indexOf(item));
         dmlRecords.add(item);

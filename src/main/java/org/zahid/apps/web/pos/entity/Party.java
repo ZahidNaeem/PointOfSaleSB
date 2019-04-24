@@ -11,7 +11,10 @@ import java.util.List;
  */
 @Entity
 @Table(name = "XXIM_PARTIES")
-@NamedQuery(name = "Party.findAll", query = "SELECT p FROM Party p")
+@NamedQueries({
+        @NamedQuery(name = "Party.findAll", query = "SELECT p FROM Party p"),
+        @NamedQuery(name = "Party.generateID", query = "SELECT coalesce(max(partyCode), 0) + 1 FROM Party p")
+})
 public class Party implements Serializable {
     private static final long serialVersionUID = 1L;
 

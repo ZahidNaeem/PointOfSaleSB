@@ -147,7 +147,7 @@
                                              partialSubmit="true" process="@this" update="@form"/>
                             <p:commandButton id="saveItemButton" icon="ui-icon-disk"
                                              value="Save" actionListener="#{itemController.save}"
-                                             partialSubmit="true" process="@this" update="@form"
+                                             process="@this" update="@form"
                                              immediate="true"
                                              disabled="#{empty itemController.dmlRecords}">
                                 <f:param name="validateItemOnSave" value="true"/>

@@ -11,8 +11,11 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "XXIM_ITEM_STOCK")
-@NamedQueries({@NamedQuery(name = "ItemStock.findAll", query = "SELECT i FROM ItemStock i"),
-        @NamedQuery(name = "ItemStock.findAllByItem", query = "SELECT i FROM ItemStock i where i.item = ?1")})
+@NamedQueries({
+        @NamedQuery(name = "ItemStock.findAll", query = "SELECT i FROM ItemStock i"),
+        @NamedQuery(name = "ItemStock.findAllByItem", query = "SELECT i FROM ItemStock i where i.item = ?1"),
+        @NamedQuery(name = "ItemStock.generateID", query = "SELECT coalesce(max(itemStockId), 0) + 1 FROM ItemStock i")
+})
 public class ItemStock implements Serializable {
     private static final long serialVersionUID = 1L;
 

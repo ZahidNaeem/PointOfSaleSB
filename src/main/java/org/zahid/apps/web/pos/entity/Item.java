@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "XXIM_ITEMS")
 @NamedQueries({
         @NamedQuery(name = "Item.findAll", query = "SELECT i FROM Item i"),
-        @NamedQuery(name = "Item.generateID", query = "SELECT max(itemCode) + 1 FROM Item i"),
+        @NamedQuery(name = "Item.generateID", query = "SELECT coalesce(max(itemCode), 0) + 1 FROM Item i"),
         @NamedQuery(name = "Item.getCategories", query = "SELECT distinct i.itemCategory FROM Item i where i.itemCategory is not null")
 })
 public class Item implements Serializable {
@@ -75,7 +75,7 @@ public class Item implements Serializable {
     private List<InvoiceDtl> invoiceDtls;
 
     // bi-directional many-to-one association to ItemStock
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "item")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
     private List<ItemStock> itemStocks;
 
     public Item() {

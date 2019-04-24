@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface ItemService {
 
-    Long generateID();
+    public Long generateID();
 
     public boolean exists(Long id);
 

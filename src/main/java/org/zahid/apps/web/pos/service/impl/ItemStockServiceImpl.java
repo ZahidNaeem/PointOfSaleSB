@@ -25,6 +25,11 @@ public class ItemStockServiceImpl implements ItemStockService {
     private final Logger logger = Logger.getLogger(ItemStockServiceImpl.class.getName());
 
     @Override
+    public Long generateID() {
+        return itemStockRepo.generateID();
+    }
+
+    @Override
     public boolean exists(Long id) {
         return itemStockRepo.existsById(id);
     }

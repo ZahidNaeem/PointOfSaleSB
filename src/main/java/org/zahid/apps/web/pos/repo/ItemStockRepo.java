@@ -11,4 +11,6 @@ import java.util.List;
 public interface ItemStockRepo extends JpaRepository<ItemStock, Long> {
 
     public List<ItemStock> findAllByItem(Item item);
+
+    public Long generateID();
 }

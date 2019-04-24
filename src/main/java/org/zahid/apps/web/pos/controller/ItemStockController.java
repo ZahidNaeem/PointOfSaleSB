@@ -141,7 +141,7 @@ public class ItemStockController implements Serializable {
         if (stockList == null) {
             stockList = new ArrayList<>();
         }
-        Long id = Long.parseLong("-" + stockList.size());
+        Long id = (itemStockService.generateID() >= (stockList.size() + 1) ? itemStockService.generateID() : (stockList.size() + 1));
         LOG.log(Level.INFO, "Stock ID: {0}", id);
         stock.setItemStockId(id);
 //        stockList = itemStockService.addStockToStockList(stock);
