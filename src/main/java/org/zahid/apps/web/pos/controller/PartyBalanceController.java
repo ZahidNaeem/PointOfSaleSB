@@ -1,5 +1,8 @@
 package org.zahid.apps.web.pos.controller;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +23,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Controller
 //@Transactional
@@ -41,7 +42,7 @@ public class PartyBalanceController implements Serializable {
     private PartyBalance selected;
     private final Set<PartyBalance> dmlRecords = new HashSet<>();
     //    private boolean dataFromDBFlag = false;
-    private static final Logger LOG = Logger.getLogger(PartyBalanceController.class.getName());
+    private static final Logger LOG = LogManager.getLogger(PartyBalanceController.class);
 
     @PostConstruct
     public void loadData() {

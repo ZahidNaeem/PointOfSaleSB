@@ -71,11 +71,11 @@ public class Item implements Serializable {
     private BigDecimal salePrice;
 
     // bi-directional many-to-one association to InvoiceDtl
-    @OneToMany(mappedBy = "item")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "item")
     private List<InvoiceDtl> invoiceDtls;
 
     // bi-directional many-to-one association to ItemStock
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "item")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "item")
     private List<ItemStock> itemStocks;
 
     public Item() {

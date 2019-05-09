@@ -19,8 +19,8 @@ public class Party implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @SequenceGenerator(name = "XXIM_PARTIES_PARTYCODE_GENERATOR")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XXIM_PARTIES_PARTYCODE_GENERATOR")
+//    @SequenceGenerator(name = "XXIM_PARTIES_PARTYCODE_GENERATOR")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XXIM_PARTIES_PARTYCODE_GENERATOR")
     @Column(name = "PARTY_CODE")
     private Long partyCode;
 
@@ -74,15 +74,15 @@ public class Party implements Serializable {
     private String web;
 
     // bi-directional many-to-one association to InvoiceMain
-    @OneToMany(mappedBy = "party")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "party")
     private List<InvoiceMain> invoiceMains;
 
     // bi-directional many-to-one association to PartyBalance
-    @OneToMany(mappedBy = "party")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "party")
     private List<PartyBalance> partyBalances;
 
     // bi-directional many-to-one association to VoucherHeader
-    @OneToMany(mappedBy = "party")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "party")
     private List<VoucherHeader> voucherHeaders;
 
     public Party() {

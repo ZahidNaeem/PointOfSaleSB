@@ -1,5 +1,7 @@
 package org.zahid.apps.web.pos.service.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -8,18 +10,18 @@ import org.zahid.apps.web.pos.controller.SecurityController;
 import org.zahid.apps.web.pos.entity.Item;
 import org.zahid.apps.web.pos.repo.ItemRepo;
 import org.zahid.apps.web.pos.service.ItemService;
+import org.zahid.apps.web.pos.utils.Miscellaneous;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 @Service
 public class ItemServiceImpl implements ItemService {
 
     private ItemRepo itemRepo;
-    private final Logger LOG = Logger.getLogger(ItemServiceImpl.class.getName());
+    private final Logger LOG = LogManager.getLogger(ItemServiceImpl.class.getName());
 
     public ItemServiceImpl() {
 
@@ -62,7 +64,10 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> save(Set<Item> items) throws DataIntegrityViolationException {
-        items.forEach(item -> updateWhoColumns(item));
+
+        items.forEach(item -> {
+            updateWhoColumns(item);
+        });
         List<Item> returnItems = itemRepo.saveAll(items);
         return returnItems;
     }
@@ -125,5 +130,15 @@ public class ItemServiceImpl implements ItemService {
         }
         item.setLastUpdatedBy(user);
         item.setLastUpdateDate(currTime);
+        item.getItemStocks().forEach(itemStock -> {
+            Miscellaneous m = new Miscellaneous();
+            int result = m.exists("XXIM_ITEM_STOCK", "ITEM_STOCK_ID", itemStock.getItemStockId());
+            if (result < 1) {
+                itemStock.setCreatedBy(user);
+                itemStock.setCreationDate(currTime);
+            }
+            itemStock.setLastUpdatedBy(user);
+            itemStock.setLastUpdateDate(currTime);
+        });
     }
 }

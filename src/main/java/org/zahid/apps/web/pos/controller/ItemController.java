@@ -1,5 +1,8 @@
 package org.zahid.apps.web.pos.controller;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.zahid.apps.web.pos.entity.Item;
@@ -17,8 +20,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 //@Controller
 //@Transactional
@@ -42,9 +43,8 @@ public class ItemController implements Serializable {
 
     // private Item selected;
     // private Set<Long> updatedItemCodes = new HashSet<>();
-    private boolean required = false;
 
-    private static final Logger LOG = Logger.getLogger(ItemController.class.getName());
+    private static final Logger LOG = LogManager.getLogger(ItemController.class);
 
 
     public ItemController() {
@@ -101,10 +101,6 @@ public class ItemController implements Serializable {
             navigationController.first();
             dmlRecords.clear();
         }
-    }
-
-    public boolean isRequired() {
-        return required;
     }
 
     public List<Item> getItems() {
@@ -181,7 +177,7 @@ public class ItemController implements Serializable {
     }
 
     public void save() {
-        LOG.info("*************** Save Start ***************");
+        LOG.info("*************** ItemController Save Start ***************");
         if (dmlRecords.size() > 0) {
 //            dmlRecords.forEach(rec -> {
 //                LOG.log(Level.INFO, "Hash Code: {0}", rec.hashCode());
@@ -195,7 +191,6 @@ public class ItemController implements Serializable {
 //                }
 //            });
             try {
-                required = true;
                 itemService.save(dmlRecords);
                 dmlRecords.clear();
                 JsfUtils.showMessage(FacesMessage.SEVERITY_INFO, "Save Successful", "Item(s) saved successfully");
@@ -203,11 +198,9 @@ public class ItemController implements Serializable {
                 JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
             } catch (Exception e) {
                 JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
-            } finally {
-                required = false;
             }
         }
-        LOG.info("*************** Save End ***************");
+        LOG.info("*************** ItemController Save End   ***************");
     }
 
     public void undoChanges() {

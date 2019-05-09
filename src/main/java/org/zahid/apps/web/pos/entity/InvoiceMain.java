@@ -49,7 +49,7 @@ public class InvoiceMain implements Serializable {
     private String remarks;
 
     // bi-directional many-to-one association to InvoiceDtl
-    @OneToMany(mappedBy = "invoiceMain")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "invoiceMain")
     private List<InvoiceDtl> invoiceDtls;
 
     // bi-directional many-to-one association to InvoiceMain
@@ -58,7 +58,7 @@ public class InvoiceMain implements Serializable {
     private InvoiceMain invoiceMain;
 
     // bi-directional many-to-one association to InvoiceMain
-    @OneToMany(mappedBy = "invoiceMain")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "invoiceMain")
     private List<InvoiceMain> invoiceMains;
 
     // bi-directional many-to-one association to Party

@@ -1,5 +1,7 @@
 package org.zahid.apps.web.pos.utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
@@ -9,10 +11,9 @@ import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlInputText;
 import javax.faces.context.FacesContext;
 import java.util.Iterator;
-import java.util.logging.Logger;
 
 public class FacesUtils {
-    private static Logger logger = Logger.getLogger(FacesUtils.class.getName());
+    private static final Logger LOG = LogManager.getLogger(FacesUtils.class);
 
     public static void disableComponent(String componentName) {
         FacesContext ctx = FacesContext.getCurrentInstance();
@@ -24,7 +25,7 @@ public class FacesUtils {
         Iterator<UIComponent> facetsAndChildren = component.getFacetsAndChildren();
         while (facetsAndChildren.hasNext()) {
             UIComponent child = facetsAndChildren.next();
-            logger.info(child.getClass().getTypeName());
+            LOG.info(child.getClass().getTypeName());
             if (child instanceof InputText) {
                 ((InputText) child).setDisabled(true);
             } else if (child instanceof HtmlInputText) {

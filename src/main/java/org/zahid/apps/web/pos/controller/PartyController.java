@@ -1,5 +1,8 @@
 package org.zahid.apps.web.pos.controller;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.zahid.apps.web.pos.entity.Party;
@@ -17,8 +20,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import static java.util.Arrays.asList;
 
 //@Controller
 //@Transactional
@@ -40,9 +43,8 @@ public class PartyController implements Serializable {
 
     // private Party selected;
     // private Set<Long> updatedPartyCodes = new HashSet<>();
-    private boolean required = false;
 
-    private static final Logger LOG = Logger.getLogger(PartyController.class.getName());
+    private static final Logger LOG = LogManager.getLogger(PartyController.class);
 
 
     public PartyController() {
@@ -101,8 +103,9 @@ public class PartyController implements Serializable {
         }
     }
 
-    public boolean isRequired() {
-        return required;
+    public List<String> getPartyType() {
+        List<String> partyTypeList = asList("Buyer", "Supplier");
+        return partyTypeList;
     }
 
     public List<Party> getParties() {
@@ -171,10 +174,9 @@ public class PartyController implements Serializable {
     }
 
     public void save() {
-        LOG.info("*************** Save Start ***************");
+        LOG.info("*************** PartyController Save Start ***************");
         if (dmlRecords.size() > 0) {
             try {
-                required = true;
                 partyService.save(dmlRecords);
                 dmlRecords.clear();
                 JsfUtils.showMessage(FacesMessage.SEVERITY_INFO, "Save Successful", "Party(s) saved successfully");
@@ -182,11 +184,9 @@ public class PartyController implements Serializable {
                 JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
             } catch (Exception e) {
                 JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
-            } finally {
-                required = false;
             }
         }
-        LOG.info("*************** Save End ***************");
+        LOG.info("*************** PartyController Save End   ***************");
     }
 
     public void undoChanges() {

@@ -1,6 +1,8 @@
 package org.zahid.apps.web.pos.service.impl;
 
-import org.jboss.logging.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class ItemStockServiceImpl implements ItemStockService {
     private ItemStockRepo itemStockRepo;
     @Autowired
     private ItemController itemController;
-    private final Logger logger = Logger.getLogger(ItemStockServiceImpl.class.getName());
+    private final Logger LOG = LogManager.getLogger(ItemStockServiceImpl.class);
 
     @Override
     public Long generateID() {
@@ -96,7 +98,7 @@ public class ItemStockServiceImpl implements ItemStockService {
     @Override
     public ItemStock save(ItemStock itemStock) {
         String user = (new SecurityController()).getUsername();
-        logger.info("User: " + user);
+        LOG.log(Level.INFO,"User: {0}", user);
         Timestamp currTime = new Timestamp(System.currentTimeMillis());
         if (!itemStockRepo.existsById(itemStock.getItemStockId())) {
             itemStock.setCreatedBy(user);
@@ -110,7 +112,6 @@ public class ItemStockServiceImpl implements ItemStockService {
     @Override
     public List<ItemStock> save(Set<ItemStock> itemStocks) {
         if (itemController.getDmlRecords().size() > 0) {
-            System.out.println("Items: " + itemController.getDmlRecords().size());
             itemController.save();
         }
         for (ItemStock itemStock : itemStocks) {

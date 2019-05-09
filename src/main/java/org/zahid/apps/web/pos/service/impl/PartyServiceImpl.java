@@ -1,5 +1,7 @@
 package org.zahid.apps.web.pos.service.impl;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Sort;
@@ -12,13 +14,12 @@ import org.zahid.apps.web.pos.service.PartyService;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 @Service
 public class PartyServiceImpl implements PartyService {
 
     private PartyRepo partyRepo;
-    private final Logger LOG = Logger.getLogger(PartyServiceImpl.class.getName());
+    private final Logger LOG = LogManager.getLogger(PartyServiceImpl.class);
 
     public PartyServiceImpl() {
 

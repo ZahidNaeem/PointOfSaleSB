@@ -1,5 +1,8 @@
 package org.zahid.apps.web.pos.controller;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.CellEditEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +23,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Controller
 //@Transactional
@@ -41,7 +42,7 @@ public class ItemStockController implements Serializable {
     private ItemStock selected;
     private final Set<ItemStock> dmlRecords = new HashSet<>();
     //    private boolean dataFromDBFlag = false;
-    private static final Logger LOG = Logger.getLogger(ItemStockController.class.getName());
+    private static final Logger LOG = LogManager.getLogger(ItemStockController.class);
 
     @PostConstruct
     public void loadData() {
@@ -183,9 +184,10 @@ public class ItemStockController implements Serializable {
     }
 
     public void save() {
+        LOG.info("*************** ItemStockController Save Start ***************");
         if (dmlRecords.size() > 0) {
             try {
-                List<ItemStock> stocks = itemStockService.save(dmlRecords);
+                itemStockService.save(dmlRecords);
 //                itemStockService.attachStockWithItem(stocks);
                 JsfUtils.showMessage(FacesMessage.SEVERITY_INFO, "Item Stock(s) saved successfully");
                 dmlRecords.clear();
@@ -193,6 +195,7 @@ public class ItemStockController implements Serializable {
                 JsfUtils.showMessage(FacesMessage.SEVERITY_ERROR, "DB Error", Miscellaneous.convertDBError(e));
             }
         }
+        LOG.info("*************** ItemStockController Save End   ***************");
     }
 
     public void undoChanges() {

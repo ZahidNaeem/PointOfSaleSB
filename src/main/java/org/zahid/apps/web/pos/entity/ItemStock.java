@@ -20,8 +20,8 @@ public class ItemStock implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @SequenceGenerator(name = "XXIM_ITEM_STOCK_ITEMSTOCKID_GENERATOR")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XXIM_ITEM_STOCK_ITEMSTOCKID_GENERATOR")
+//    @SequenceGenerator(name = "XXIM_ITEM_STOCK_ITEMSTOCKID_GENERATOR")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XXIM_ITEM_STOCK_ITEMSTOCKID_GENERATOR")
     @Column(name = "ITEM_STOCK_ID")
     private Long itemStockId;
 

@@ -40,7 +40,7 @@ public class ExpenseMain implements Serializable {
     private String remarks;
 
     // bi-directional many-to-one association to ExpenseDtl
-    @OneToMany(mappedBy = "expenseMain")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "expenseMain")
     private List<ExpenseDtl> expenseDtls;
 
     public ExpenseMain() {

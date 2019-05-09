@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/template.xhtml">
+
+
+    <ui:define name="title">
+        <h:outputText value="Party Registration Form"/>
+    </ui:define>
+
+    <ui:define name="body">
+        <h:form id="PartyForm">
+            <p:remoteCommand name="updatePartyBalance"
+                             actionListener="#{partyBalanceController.updateBalanceDataModel}"
+                             update=":PartyForm:partybalancelist"/>
+            <p:growl id="msgs" showDetail="true" autoUpdate="true"/>
+            <p:panel>
+                <p:commandButton value="First"
+                                 actionListener="#{partyController.navigationController.first()}"
+                                 disabled="#{partyController.navigationController.firstDisabled}"
+                                 partialSubmit="true" process="@this"
+                                 oncomplete="updatePartyBalance()" update="@form"/>
+                <p:commandButton value="Previous"
+                                 actionListener="#{partyController.navigationController.previous()}"
+                                 disabled="#{partyController.navigationController.previousDisabled}"
+                                 partialSubmit="true" process="@this"
+                                 oncomplete="updatePartyBalance()" update="@form"/>
+                <p:commandButton value="Next"
+                                 actionListener="#{partyController.navigationController.next()}"
+                                 disabled="#{partyController.navigationController.nextDisabled}"
+                                 partialSubmit="true" process="@this"
+                                 oncomplete="updatePartyBalance()" update="@form"/>
+                <p:commandButton value="Last"
+                                 actionListener="#{partyController.navigationController.last()}"
+                                 disabled="#{partyController.navigationController.lastDisabled}"
+                                 partialSubmit="true" process="@this"
+                                 oncomplete="updatePartyBalance()" update="@form"/>
+                <p:commandButton value="Refresh"
+                                 actionListener="#{partyController.loadData}"
+                                 partialSubmit="true" process="@this"
+                                 oncomplete="updatePartyBalance()" update="@form"/>
+                <p:commandButton value="Print" rendered="false">
+                    <p:printer target=":confirmPartyDeleteDlg"/>
+                </p:commandButton>
+                <p:commandButton rendered="false" value="Print2"
+                                 onclick="window.print()"/>
+            </p:panel>
+            <p:panel header="Parties" id="PartyMainPanel">
+                <p:panelGrid id="PartiesGrid" columns="2">
+                    <p:outputLabel value="Party Code"/>
+                    <h:outputText
+                            value="#{partyController.navigationController.object.partyCode}"
+                            style="display: block; width: 100%;"/>
+                    <p:outputLabel value="Party Name" for="partyName"/>
+                    <p:inputText id="partyName"
+                                 value="#{partyController.navigationController.object.partyName}"
+                                 required="#{!empty param['validatePartyOnSave']}"
+                                 valueChangeListener="#{partyController.onValueChanged}"
+                                 title="Party Name" style="width: 100%">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Owner" for="partyOwner"/>
+                    <p:inputText id="partyOwner"
+                                 value="#{partyController.navigationController.object.partyOwner}"
+                                 valueChangeListener="#{partyController.onValueChanged}"
+                                 title="Party Owner" style="width: 100%">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Contact Person" for="contactPerson"/>
+                    <p:inputText id="contactPerson"
+                                 value="#{partyController.navigationController.object.contactPerson}"
+                                 valueChangeListener="#{partyController.onValueChanged}"
+                                 title="Contact Person" style="width: 100%">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Party Type" for="partyType"/>
+                    <p:selectOneMenu id="partyType"
+                                     value="#{partyController.navigationController.object.partyType}"
+                                     valueChangeListener="#{partyController.onValueChanged}"
+                                     filter="true" editable="true"
+                                     style="width: fit-content">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                        <f:selectItems value="#{partyController.partyType}" var="partyType"
+                                       itemValue="#{partyType}" noSelectionValue="Select Party Type"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Address" for="address"/>
+                    <p:inputText id="address"
+                                 value="#{partyController.navigationController.object.address}"
+                                 valueChangeListener="#{partyController.onValueChanged}"
+                                 title="Address" style="width: 100%">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Web" for="web"/>
+                    <p:inputText id="web"
+                                 value="#{partyController.navigationController.object.web}"
+                                 valueChangeListener="#{partyController.onValueChanged}"
+                                 title="Web" style="width: 100%">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="E-mail" for="email"/>
+                    <p:inputText id="email"
+                                 value="#{partyController.navigationController.object.email}"
+                                 valueChangeListener="#{partyController.onValueChanged}"
+                                 title="E-mail" style="width: 100%">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Phone" for="phone"/>
+                    <p:inputText id="phone"
+                                 value="#{partyController.navigationController.object.phone}"
+                                 valueChangeListener="#{partyController.onValueChanged}"
+                                 title="phone" style="width: 100%">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Cell#" for="cellNo"/>
+                    <p:inputText id="cellNo"
+                                 value="#{partyController.navigationController.object.cellNo}"
+                                 valueChangeListener="#{partyController.onValueChanged}"
+                                 title="Cell#" style="width: 100%">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Fax" for="fax"/>
+                    <p:inputText id="fax"
+                                 value="#{partyController.navigationController.object.fax}"
+                                 valueChangeListener="#{partyController.onValueChanged}"
+                                 title="fax" style="width: 100%">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="N.T.N" for="ntn"/>
+                    <p:inputText id="ntn"
+                                 value="#{partyController.navigationController.object.ntn}"
+                                 valueChangeListener="#{partyController.onValueChanged}"
+                                 title="N.T.N" style="width: 100%">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="S.T.R.N" for="strn"/>
+                    <p:inputText id="strn"
+                                 value="#{partyController.navigationController.object.strn}"
+                                 valueChangeListener="#{partyController.onValueChanged}"
+                                 title="S.T.R.N" style="width: 100%">
+                        <p:ajax update="savePartyButton cancelPartyButton"/>
+                    </p:inputText>
+                    <p:outputLabel value="Effective Start Date"
+                                   for="effectiveStartDate"/>
+                    <p:calendar id="effectiveStartDate" pattern="dd MMM yyyy"
+                                value="#{partyController.navigationController.object.effectiveStartDate}"
+                                valueChangeListener="#{partyController.onValueChanged}"
+                                title="Effective Start Date" showWeek="true"
+                                showButtonPanel="true" navigator="true" showOn="button"
+                                readonlyInput="true" style="width: 100%"
+                                required="#{!empty param['validatePartyOnSave']}">
+                        <p:ajax event="dateSelect" update="savePartyButton cancelPartyButton"/>
+                    </p:calendar>
+                    <p:outputLabel value="Effective End Date" for="effectiveEndDate"/>
+                    <p:calendar id="effectiveEndDate" pattern="dd MMM yyyy"
+                                value="#{partyController.navigationController.object.effectiveEndDate}"
+                                valueChangeListener="#{partyController.onValueChanged}"
+                                title="Effective End Date" showWeek="true" showButtonPanel="true"
+                                navigator="true" showOn="button" readonlyInput="true"
+                                style="width: 100%">
+                        <p:ajax event="dateSelect" update="savePartyButton cancelPartyButton"/>
+                    </p:calendar>
+                    <f:facet name="footer">
+                        <p:panel>
+                            <p:commandButton id="createPartyButton" icon="ui-icon-plus"
+                                             value="Create" actionListener="#{partyController.prepareCreate}"
+                                             oncomplete="updatePartyBalance()"
+                                             partialSubmit="true" process="@this" update="@form"/>
+                            <p:commandButton id="savePartyButton" icon="ui-icon-disk"
+                                             value="Save" actionListener="#{partyController.save}"
+                                             process="@this" update="@form"
+                                             immediate="true"
+                                             disabled="#{empty partyController.dmlRecords}">
+                                <f:param name="validatePartyOnSave" value="true"/>
+                            </p:commandButton>
+                            <p:commandButton id="cancelPartyButton"
+                                             icon="ui-icon-arrowreturn-1-w" value="Undo"
+                                             actionListener="#{partyController.undoChanges}" process="@this"
+                                             partialSubmit="true" update="@form" oncomplete="updatePartyBalance()"
+                                             disabled="#{empty partyController.dmlRecords}" immediate="true"/>
+                            <p:commandButton id="deletePartyButton" icon="ui-icon-trash"
+                                             partialSubmit="true" value="Delete"
+                                             process="@this" immediate="true"
+                                             oncomplete="PF('confirmPartyDeleteDialog').show()"
+                                             disabled="#{empty partyController.navigationController.object}"/>
+                        </p:panel>
+                    </f:facet>
+                </p:panelGrid>
+                <p:panel header="Party Balance">
+                    <p:remoteCommand name="disableButtons"
+                                     update=":PartyForm:partybalancelist:saveBalanceButton :PartyForm:partybalancelist:cancelBalanceButton"/>
+                    <p:dataTable id="partybalancelist" var="partybalance"
+                                 value="#{partyBalanceController.balanceDataModel}"
+                                 paginator="true" selectionMode="single"
+                                 selection="#{partyBalanceController.selected}" rowKey="#{partybalance.partyBalanceId}"
+                                 resizableColumns="true"
+                                 liveResize="true" rows="10" draggableColumns="true"
+                                 rowsPerPageTemplate="10,20,30,40,50" paginatorPosition="bottom"
+                                 editable="true" editMode="cell">
+                        <p:ajax event="rowSelect"
+                                update="saveBalanceButton cancelBalanceButton"/>
+                        <p:ajax event="rowUnselect"
+                                update="saveBalanceButton cancelBalanceButton"/>
+                        <p:ajax event="cellEdit" process="@this" listener="#{partyBalanceController.onCellEdit}"
+                                update="saveBalanceButton cancelBalanceButton"/>
+                        <p:column width="200" headerText="Balance Date">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{partybalance.partyBalanceDate}"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:calendar focusOnSelect="true" showButtonPanel="true"
+                                                pattern="dd MMM yyyy" showWeek="true" showOn="button"
+                                                navigator="true" value="#{partybalance.partyBalanceDate}"
+                                                required="true" readonlyInput="true" style="width:96%">
+                                        <p:ajax event="dateSelect" oncomplete="disableButtons()"/>
+                                    </p:calendar>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column width="150" headerText="Amount">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{partybalance.amount}" style="text-align: right;"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="itAmount" value="#{partybalance.amount}"
+                                                 required="true" style="text-align: right; width: 96%">
+                                        <f:convertNumber pattern="###,###,###.##"/>
+                                        <p:ajax event="change" oncomplete="disableButtons()"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column headerText="Remarks">
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{partybalance.remarks}"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText id="itRemarks" value="#{partybalance.remarks}"
+                                                 style="width: 96%">
+                                        <p:ajax event="change" oncomplete="disableButtons()"/>
+                                    </p:inputText>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column width="100">
+                            <p:commandButton id="deleteBalanceButton"
+                                             actionListener="#{partyBalanceController.prepareDelete}"
+                                             icon="ui-icon-trash" value="Delete"
+                                             partialSubmit="true" process="@this" immediate="true"
+                                             oncomplete="PF('confirmBalanceDeleteDialog').show()"/>
+                        </p:column>
+                        <f:facet name="footer">
+                            <p:commandButton id="createBalanceButton" icon="ui-icon-plus"
+                                             value="Create" actionListener="#{partyBalanceController.prepareCreate}"
+                                             partialSubmit="true" process="@this" update=":growl,partybalancelist"/>
+                            <p:commandButton id="saveBalanceButton" icon="ui-icon-disk"
+                                             value="Save" actionListener="#{partyBalanceController.save}"
+                                             partialSubmit="true" process="@this" update=":growl,partybalancelist"
+                                             disabled="#{empty partyBalanceController.dmlRecords}"/>
+                            <p:commandButton id="cancelBalanceButton"
+                                             icon="ui-icon-arrowreturn-1-w" value="Undo"
+                                             actionListener="#{partyBalanceController.undoChanges}"
+                                             partialSubmit="true" process="@this" update=":growl,partybalancelist"
+                                             oncomplete="updatePartyBalance()" immediate="true"
+                                             disabled="#{empty partyBalanceController.dmlRecords}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:panel>
+            </p:panel>
+        </h:form>
+        <ui:include src="ConfirmPartyDelete.xhtml"/>
+        <ui:include src="ConfirmBalanceDelete.xhtml"/>
+    </ui:define>
+</ui:composition>
+</html>

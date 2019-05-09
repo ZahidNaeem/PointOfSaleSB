@@ -19,11 +19,12 @@ public class PartyBalance implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @SequenceGenerator(name = "XXIM_PARTY_BALANCE_PARTYBALANCEID_GENERATOR")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XXIM_PARTY_BALANCE_PARTYBALANCEID_GENERATOR")
+//    @SequenceGenerator(name = "XXIM_PARTY_BALANCE_PARTYBALANCEID_GENERATOR")
+//    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "XXIM_PARTY_BALANCE_PARTYBALANCEID_GENERATOR")
     @Column(name = "PARTY_BALANCE_ID")
     private Long partyBalanceId;
 
+    @Column(name = "AMOUNT")
     private BigDecimal amount;
 
     @Column(name = "CREATED_BY")
@@ -46,6 +47,7 @@ public class PartyBalance implements Serializable {
 
     // bi-directional many-to-one association to Party
     @ManyToOne
+//    @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "PARTY_CODE")
     private Party party;
 

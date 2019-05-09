@@ -1,6 +1,8 @@
 package org.zahid.apps.web.pos.service.impl;
 
-import org.jboss.logging.Logger;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,8 @@ public class PartyBalanceServiceImpl implements PartyBalanceService {
     private PartyBalanceRepo partyBalanceRepo;
     @Autowired
     private PartyController partyController;
-    private final Logger logger = Logger.getLogger(PartyBalanceServiceImpl.class.getName());
+    //    private final Logger LOG = Logger.getLogger(PartyBalanceServiceImpl.class.getName());
+    private final Logger LOG = LogManager.getLogger(PartyBalanceServiceImpl.class);
 
     @Override
     public Long generateID() {
@@ -96,7 +99,7 @@ public class PartyBalanceServiceImpl implements PartyBalanceService {
     @Override
     public PartyBalance save(PartyBalance partyBalance) {
         String user = (new SecurityController()).getUsername();
-        logger.info("User: " + user);
+        LOG.log(Level.INFO, "User: {0}", user);
         Timestamp currTime = new Timestamp(System.currentTimeMillis());
         if (!partyBalanceRepo.existsById(partyBalance.getPartyBalanceId())) {
             partyBalance.setCreatedBy(user);
@@ -110,7 +113,7 @@ public class PartyBalanceServiceImpl implements PartyBalanceService {
     @Override
     public List<PartyBalance> save(Set<PartyBalance> partyBalances) {
         if (partyController.getDmlRecords().size() > 0) {
-            System.out.println("Parties: " + partyController.getDmlRecords().size());
+//            LOG("Parties: " + partyController.getDmlRecords().size());
             partyController.save();
         }
         for (PartyBalance partyBalance : partyBalances) {

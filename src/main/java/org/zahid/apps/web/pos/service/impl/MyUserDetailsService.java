@@ -1,5 +1,8 @@
 package org.zahid.apps.web.pos.service.impl;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +23,7 @@ import java.util.Set;
 
 @Service("userDetailsService")
 public class MyUserDetailsService implements UserDetailsService {
+    private static final Logger LOG = LogManager.getLogger(MyUserDetailsService.class);
     @Autowired
     UserDetailRepo userDetailRepo;
 
@@ -30,7 +34,7 @@ public class MyUserDetailsService implements UserDetailsService {
         if (userDetails != null && userDetails.size() > 0) {
             UserDetail detail = userDetails.get(0);
             if (detail != null) {
-                System.out.println("Password: " + passwordEncoder(detail.getUPassword()));
+                LOG.log(Level.INFO,"Password: {0}", passwordEncoder(detail.getUPassword()));
                 User user = new User(detail.getUName(), passwordEncoder(detail.getUPassword()), true, true, true, true, buildUserAuthority(s));
                 return user;
             }
