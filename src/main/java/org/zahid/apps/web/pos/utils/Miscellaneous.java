@@ -71,7 +71,7 @@ public class Miscellaneous {
 //        return false;
 //    }
 
-    public int exists(String table, String column, Long id) {
+    public static int exists(String table, String column, Long id) {
         int result = 0;
         try {
             String sql = "BEGIN :CNT := XXIM_RECORD_EXISTS (:PTABLE,:PCOLUMN,:PID); END;";

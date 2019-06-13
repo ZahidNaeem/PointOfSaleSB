@@ -98,7 +98,7 @@ public class ItemStockServiceImpl implements ItemStockService {
     @Override
     public ItemStock save(ItemStock itemStock) {
         String user = (new SecurityController()).getUsername();
-        LOG.log(Level.INFO,"User: {0}", user);
+        LOG.log(Level.INFO, "User: {0}", user);
         Timestamp currTime = new Timestamp(System.currentTimeMillis());
         if (!itemStockRepo.existsById(itemStock.getItemStockId())) {
             itemStock.setCreatedBy(user);

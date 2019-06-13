@@ -1,5 +1,6 @@
 package org.zahid.apps.web.pos.service.impl;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -131,8 +132,9 @@ public class ItemServiceImpl implements ItemService {
         item.setLastUpdatedBy(user);
         item.setLastUpdateDate(currTime);
         item.getItemStocks().forEach(itemStock -> {
-            Miscellaneous m = new Miscellaneous();
-            int result = m.exists("XXIM_ITEM_STOCK", "ITEM_STOCK_ID", itemStock.getItemStockId());
+            int result = Miscellaneous.exists("XXIM_ITEM_STOCK", "ITEM_STOCK_ID", itemStock.getItemStockId());
+            LOG.log(Level.INFO, "Record: " + itemStock.getItemStockId());
+            LOG.log(Level.INFO, "Result: " + result);
             if (result < 1) {
                 itemStock.setCreatedBy(user);
                 itemStock.setCreationDate(currTime);

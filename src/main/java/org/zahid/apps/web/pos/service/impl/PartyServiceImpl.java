@@ -1,5 +1,6 @@
 package org.zahid.apps.web.pos.service.impl;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.zahid.apps.web.pos.controller.SecurityController;
 import org.zahid.apps.web.pos.entity.Party;
 import org.zahid.apps.web.pos.repo.PartyRepo;
 import org.zahid.apps.web.pos.service.PartyService;
+import org.zahid.apps.web.pos.utils.Miscellaneous;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -106,5 +108,16 @@ public class PartyServiceImpl implements PartyService {
         }
         party.setLastUpdatedBy(user);
         party.setLastUpdateDate(currTime);
+        party.getPartyBalances().forEach(partyBalance -> {
+            int result = Miscellaneous.exists("XXIM_PARTY_BALANCE", "PARTY_BALANCE_ID", partyBalance.getPartyBalanceId());
+            LOG.log(Level.INFO, "Record: " + partyBalance.getPartyBalanceId());
+            LOG.log(Level.INFO, "Result: " + result);
+            if (result < 1) {
+                partyBalance.setCreatedBy(user);
+                partyBalance.setCreationDate(currTime);
+            }
+            partyBalance.setLastUpdatedBy(user);
+            partyBalance.setLastUpdateDate(currTime);
+        });
     }
 }

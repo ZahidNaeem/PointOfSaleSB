@@ -162,6 +162,10 @@
                                              process="@this" immediate="true"
                                              oncomplete="PF('confirmItemDeleteDialog').show()"
                                              disabled="#{empty itemController.navigationController.object}"/>
+                            <p:commandButton id="printStockButton" icon="ui-icon-disk"
+                                             value="Print" actionListener="#{itemController.generateStockReport}"
+                                             process="@this" update="@form">
+                            </p:commandButton>
                         </p:panel>
                     </f:facet>
                 </p:panelGrid>
