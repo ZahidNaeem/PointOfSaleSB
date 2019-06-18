@@ -3,11 +3,12 @@ package org.zahid.apps.web.pos.controller;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.primefaces.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.zahid.apps.web.pos.entity.Item;
 import org.zahid.apps.web.pos.service.ItemService;
-import org.zahid.apps.web.pos.service.ReportService2;
+import org.zahid.apps.web.pos.service.ReportService;
 import org.zahid.apps.web.pos.utils.JsfUtils;
 import org.zahid.apps.web.pos.utils.Miscellaneous;
 import org.zahid.apps.web.pos.utils.NavigationController;
@@ -15,12 +16,16 @@ import org.zahid.apps.web.pos.utils.NavigationController;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Named;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 //@Controller
 //@Transactional
@@ -34,7 +39,7 @@ public class ItemController implements Serializable {
 
     private ItemService itemService;
     @Resource
-    private ReportService2 reportService2;
+    private ReportService reportService;
     //    @Autowired
 //    private ItemStockController itemStockController;
     private List<Item> items;
@@ -210,13 +215,22 @@ public class ItemController implements Serializable {
         itemOperations("UNDO");
     }
 
-    public void generateStockReport() {
-        Map<String, Object> paramsMap = new HashMap<>();
+    public void generateStockReport() throws IOException {
+        /*Map<String, Object> paramsMap = new HashMap<>();
         paramsMap.put("BindItemCode", navigationController.object.getItemCode());
         try {
-            reportService2.generateReport(paramsMap, "xxim_item_stock_summary_report");
+            reportService.generateReport(paramsMap, "xxim_item_stock_summary_report");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
+
+        JSONObject params = new JSONObject();
+        params.put("BindItemCode", navigationController.object.getItemCode());
+        String url = Miscellaneous.callReport("xxim_item_stock_summary_report", params);
+        FacesContext fc = FacesContext.getCurrentInstance();
+//        fc.getApplication().getNavigationHandler().handleNavigation(fc, null, url);
+        ExternalContext ec = fc.getExternalContext();
+        ec.redirect(url);
+//        return Miscellaneous.callReport("xxim_item_stock_summary_report", params);
     }
 }

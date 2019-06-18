@@ -22,7 +22,7 @@ public class ReportService {
     private DataSource dataSource;
     Logger log = LogManager.getLogger(ReportService.class);
     //    private static final String logo_path = "/jasper/images/stackextend-logo.png";
-    private final String ROOT_DIR = "/jasper/";
+    private final String ROOT_DIR = "/META-INF/resources/jasper/";
 
     public void generateReport(Map<String, Object> paramsMap, String reportName) throws IOException {
         File pdfFile = File.createTempFile(reportName, ".pdf");
@@ -32,8 +32,8 @@ public class ReportService {
             final JasperReport report = loadTemplate(reportName);
             // Create an empty datasource.
 //            final JRBeanCollectionDataSource dataSource2 = new JRBeanCollectionDataSource(Collections.singletonList("reports"));
-//            JRDataSource dataSource2 = new JREmptyDataSource();
-            JRDataSource dataSource2 = (JRDataSource) dataSource;
+            JRDataSource dataSource2 = new JREmptyDataSource();
+//            JRDataSource dataSource2 = (JRDataSource) dataSource;
             // Render as PDF.
             JasperReportsUtils.renderAsPdf(report, paramsMap, dataSource2, pos);
         } catch (final Exception e) {
@@ -43,7 +43,7 @@ public class ReportService {
 
     // Load invoice jrxml template
     private JasperReport loadTemplate(String reportName) throws JRException {
-        final String REPORT_TEMPLATE = ROOT_DIR + reportName;
+        final String REPORT_TEMPLATE = ROOT_DIR + reportName + ".jrxml";
         log.info(String.format("Invoice template path : %s", REPORT_TEMPLATE));
         final InputStream reportInputStream = getClass().getResourceAsStream(REPORT_TEMPLATE);
         final JasperDesign jasperDesign = JRXmlLoader.load(reportInputStream);

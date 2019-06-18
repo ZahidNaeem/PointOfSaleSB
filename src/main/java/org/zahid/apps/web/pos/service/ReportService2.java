@@ -23,7 +23,7 @@ public class ReportService2 {
     private DataSource dataSource;
     Logger log = LogManager.getLogger(ReportService2.class);
     //    private static final String logo_path = "/jasper/images/stackextend-logo.png";
-    private final String ROOT_DIR = "/jasper/";
+    private final String ROOT_DIR = "/META-INF/resources/jasper/";
 
     public void generateReport(Map<String, Object> parameters, String reportName) throws IOException {
         final String REPORT_TEMPLATE = ROOT_DIR + reportName + ".jrxml";

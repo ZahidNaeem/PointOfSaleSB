@@ -3,8 +3,12 @@ package org.zahid.apps.web.pos.utils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.primefaces.json.JSONObject;
 
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.HashSet;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -12,6 +16,7 @@ import java.util.Set;
 
 public class Miscellaneous {
     private static final Logger LOG = LogManager.getLogger(Miscellaneous.class);
+    private static final String SERVLET_START = "/reportservlet?repName=";
 
     public static Exception getNestedException(Exception rootException) {
         Exception exception = rootException;
@@ -124,5 +129,11 @@ public class Miscellaneous {
 //                .setParameter(3, id)
 //                .getSingleResult());*/
         return result;
+    }
+
+    public static final String callReport(String repName, JSONObject params) {
+        String reportURL = SERVLET_START + repName + (params != null ? "&params=" + params.toString() : "");
+        LOG.info("Report URL: " + reportURL);
+        return reportURL;
     }
 }
